@@ -12,6 +12,7 @@ import { StyleSheet, ScrollView, View } from "react-native";
 import Heading from "./Heading";
 import Input from "./Input";
 import Button from "./Button";
+import TodoList from "./TodoList";
 
 let todoIndex = 0;
 
@@ -39,7 +40,7 @@ const App = () => {
       complete: false
     };
     todoIndex++;
-    setTodos({ ...getTodos, todos: [...getTodos.todos, todo] });
+    setTodos({ ...getTodos, todos: [...getTodos.todos, todo], inputValue: "" });
   };
 
   return (
@@ -50,6 +51,7 @@ const App = () => {
           inputValue={getTodos.inputValue}
           inputChange={text => setTodos({ ...getTodos, inputValue: text })}
         />
+        <TodoList todos={getTodos.todos} />
         <Button submitTodo={submitTodo} />
       </ScrollView>
     </View>
