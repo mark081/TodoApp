@@ -24,12 +24,13 @@ const App = () => {
   });
 
   useEffect(() => {
-    console.log("List TODOs:", getTodos);
+    console.log(`useEffect:${getTodos.inputValue}`);
   }, [getTodos]);
 
-  const submitTodo = () => {
+  let submitTodo;
+  submitTodo = () => {
     let inputValue = getTodos.inputValue;
-    console.log("Input Value ", inputValue);
+    console.log(`Input Value:${inputValue}`);
     let regex = /^\s*$/;
     if (inputValue.match(regex)) {
       return;
@@ -37,10 +38,26 @@ const App = () => {
     const todo = {
       title: inputValue,
       todoIndex,
-      complete: false
+      complete: false,
     };
     todoIndex++;
     setTodos({ ...getTodos, todos: [...getTodos.todos, todo], inputValue: "" });
+  };
+
+  const deleteTodo = todoIndex => {
+    let { todos } = getTodos;
+    todos = todos.filter(todo => todo.todoIndex !== todoIndex);
+    setTodos({ ...getTodos, todos });
+  };
+
+  const toggleComplete = todoIndex => {
+    let { todos } = getTodos;
+    todos.forEach(todo => {
+      if (todo.todoIndex === todoIndex) {
+        todo.complete = !todo.complete;
+      }
+    });
+    setTodos({ ...getTodos, todos });
   };
 
   return (
@@ -51,7 +68,11 @@ const App = () => {
           inputValue={getTodos.inputValue}
           inputChange={text => setTodos({ ...getTodos, inputValue: text })}
         />
-        <TodoList todos={getTodos.todos} />
+        <TodoList
+          toggleComplete={toggleComplete}
+          deleteTodo={deleteTodo}
+          todos={getTodos.todos}
+        />
         <Button submitTodo={submitTodo} />
       </ScrollView>
     </View>
